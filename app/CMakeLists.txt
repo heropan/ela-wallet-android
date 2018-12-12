@@ -12,7 +12,7 @@ include_directories(
         src/main/cpp/did/include
         src/main/cpp/wallet/include)
 
-link_directories(libs/armeabi-v7a)
+link_directories(libs/armeabi-v7a libs/arm64-v8a libs/x86 libs/x86 libs/x86_64)
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -48,7 +48,6 @@ find_library( # Sets the name of the path variable.
 target_link_libraries( # Specifies the target library.
         wallet
         spvsdk
-        idchain
         # Links the target library to the log library
         # included in the NDK.
         ${log-lib})

@@ -43,7 +43,4 @@ void ThrowWalletException(JNIEnv *env, const char *errorInfo);
 
 void ThrowWalletExceptionWithECode(JNIEnv *env, int errorcode, const char *errorInfo);
 
-//If NewStringUTF has running error, need to use the method.
-jstring stringTojstring(JNIEnv *env, std::string str);
-
 #endif  // __ELASTOS_WALLET_JNI_UTILS_H__
