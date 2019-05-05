@@ -15,8 +15,8 @@ public class MasterWalletManager {
         mInstance = InitMasterWalletManager(mRootPath);
     }
 
-    public void DisposeNative() {
-        Log.i(TAG, "DisposeNative");
+    public void Dispose() {
+        Log.i(TAG, "Dispose");
         DisposeNative(mInstance);
     }
 

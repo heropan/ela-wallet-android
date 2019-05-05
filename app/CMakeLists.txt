@@ -5,14 +5,19 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
-file(GLOB_RECURSE CPP_SOURCE_FILES src/main/cpp/*.cpp)
+file(GLOB_RECURSE CPP_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jni/*.cpp)
 
 include_directories(
-        src/main/cpp/
-        src/main/cpp/did/include
-        src/main/cpp/wallet/include)
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jni/
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jni/include
+)
 
-link_directories(libs/armeabi-v7a libs/arm64-v8a libs/x86 libs/x86 libs/x86_64)
+link_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jni/libs/armeabi-v7a
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jni/libs/arm64-v8a
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jni/libs/x86
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/main/jni/libs/x86_64
+)
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -20,7 +25,7 @@ link_directories(libs/armeabi-v7a libs/arm64-v8a libs/x86 libs/x86 libs/x86_64)
 # Gradle automatically packages shared libraries with your APK.
 
 add_library( # Sets the name of the library.
-        wallet
+        spvsdk_jni
 
         # Sets the library as a shared library.
         SHARED
@@ -36,7 +41,6 @@ add_library( # Sets the name of the library.
 
 find_library( # Sets the name of the path variable.
         log-lib
-
         # Specifies the name of the NDK library that
         # you want CMake to locate.
         log)
@@ -46,7 +50,7 @@ find_library( # Sets the name of the path variable.
 # build script, prebuilt third-party libraries, or system libraries.
 
 target_link_libraries( # Specifies the target library.
-        wallet
+        spvsdk_jni
         spvsdk
         # Links the target library to the log library
         # included in the NDK.

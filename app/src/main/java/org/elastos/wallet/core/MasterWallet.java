@@ -57,24 +57,9 @@ public class MasterWallet {
         throw new WalletException("Not support the other sidechain now");
     }
 
-    public SubWallet RecoverSubWallet(String chainID, int limitGap, long feePerKb) throws WalletException {
-        long subProxy = RecoverSubWallet(mInstance, chainID, limitGap, feePerKb);
-        if (subProxy == 0) {
-            throw new WalletException("Native recover subwallet fail: subProxy is 0");
-        }
-
-        if (CHAINID.MAIN.equals(chainID)) {
-            return new MainchainSubWallet(subProxy);
-        } else if (CHAINID.ID.equals(chainID)) {
-            return new IDChainSubWallet(subProxy);
-        }
-
-        Log.e(TAG, "RecoverSubWallet error: unsupport chainID = " + chainID);
-        throw new WalletException("Not support the other sidechain now");
-    }
-
     public void DestroyWallet(SubWallet wallet) {
-        DestroyWallet(mInstance, wallet.getProxy());
+        wallet.RemoveCallback();
+        DestroyWallet(mInstance, wallet.GetProxy());
     }
 
     public String GetPublicKey() {
@@ -85,7 +70,7 @@ public class MasterWallet {
         return Sign(mInstance, message, payPassword);
     }
 
-    public String CheckSign(String publicKey, String message, String signature) throws WalletException {
+    public boolean CheckSign(String publicKey, String message, String signature) throws WalletException {
         return CheckSign(mInstance, publicKey, message, signature);
     }
 
@@ -117,15 +102,13 @@ public class MasterWallet {
 
     private native long CreateSubWallet(long instance, String chainID, long feePerKb);
 
-    private native long RecoverSubWallet(long instance, String chainID, int limitGap, long feePerKb);
-
     private native String GetPublicKey(long instance);
 
     private native void DestroyWallet(long instance, long subWalletProxy);
 
     private native String Sign(long instance, String message, String payPassword);
 
-    private native String CheckSign(long instance, String publicKey, String message, String signature);
+    private native boolean CheckSign(long instance, String publicKey, String message, String signature);
 
     private native boolean IsAddressValid(long instance, String address);
 

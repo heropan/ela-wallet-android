@@ -1,14 +1,18 @@
 
 package org.elastos.wallet.core;
 
+import android.util.Log;
+
 /**
  * SubWallet
  */
 public class SubWallet {
     private long mInstance;
+    private SubWalletCallback mCallback = null;
+    private String TAG = "SubWallet";
 
-    public String GetChainId() throws WalletException {
-        return GetChainId(mInstance);
+    public String GetChainID() throws WalletException {
+        return GetChainID(mInstance);
     }
 
     public String GetBasicInfo() throws WalletException {
@@ -19,8 +23,8 @@ public class SubWallet {
         return GetBalanceInfo(mInstance);
     }
 
-    public long GetBalance() throws WalletException {
-        return GetBalance(mInstance);
+    public long GetBalance(int balanceType) throws WalletException {
+        return GetBalance(mInstance, balanceType);
     }
 
     public String CreateAddress() throws WalletException {
@@ -31,32 +35,39 @@ public class SubWallet {
         return GetAllAddress(mInstance, start, count);
     }
 
-    public long GetBalanceWithAddress(String address) throws WalletException {
-        return GetBalanceWithAddress(mInstance, address);
+    public long GetBalanceWithAddress(String address, int balanceType) throws WalletException {
+        return GetBalanceWithAddress(mInstance, address, balanceType);
     }
 
     public void AddCallback(SubWalletCallback subCallback) throws WalletException {
-        AddCallback(mInstance, subCallback);
+        if (mCallback == null) {
+            AddCallback(mInstance, subCallback.GetProxy());
+            mCallback = subCallback;
+        } else {
+            Log.w(TAG, "SubWallet[" + GetChainID() + "]'s callback already registered");
+        }
     }
 
     public void RemoveCallback() throws WalletException {
-        RemoveCallback(mInstance);
+        if (mCallback != null) {
+            RemoveCallback(mInstance, mCallback.GetProxy());
+            mCallback.Dispose();
+            mCallback = null;
+        } else {
+            Log.w(TAG, "SubWallet[" + GetChainID() + "]'s callback already remove");
+        }
     }
 
-    public String CreateTransaction(String fromAddress, String toAddress, long amount, String memo, String remark) throws WalletException {
-        return CreateTransaction(mInstance, fromAddress, toAddress, amount, memo, remark);
-    }
-
-    public String CreateMultiSignTransaction(String fromAddress, String toAddress, long amount, String memo) throws WalletException {
-        return CreateMultiSignTransaction(mInstance, fromAddress, toAddress, amount, memo);
+    public String CreateTransaction(String fromAddress, String toAddress, long amount, String memo, String remark, boolean useVotedUTXO) throws WalletException {
+        return CreateTransaction(mInstance, fromAddress, toAddress, amount, memo, remark, useVotedUTXO);
     }
 
     public long CalculateTransactionFee(String rawTransaction, long feePerKb) throws WalletException {
         return CalculateTransactionFee(mInstance, rawTransaction, feePerKb);
     }
 
-    public String UpdateTransactionFee(String rawTransaction, long fee) throws WalletException {
-        return UpdateTransactionFee(mInstance, rawTransaction, fee);
+    public String UpdateTransactionFee(String rawTransaction, long fee, String fromAddress) throws WalletException {
+        return UpdateTransactionFee(mInstance, rawTransaction, fee, fromAddress);
     }
 
     public String SignTransaction(String rawTransaction, String payPassword) throws WalletException {
@@ -79,7 +90,7 @@ public class SubWallet {
         return Sign(mInstance, message, payPassword);
     }
 
-    public String CheckSign(String publicKey, String message, String signature) throws WalletException {
+    public boolean CheckSign(String publicKey, String message, String signature) throws WalletException {
         return CheckSign(mInstance, publicKey, message, signature);
     }
 
@@ -91,35 +102,33 @@ public class SubWallet {
         mInstance = instance;
     }
 
-    protected long getProxy() {
+    protected long GetProxy() {
         return mInstance;
     }
 
-    private native String GetChainId(long subProxy);
+    private native String GetChainID(long subProxy);
 
     private native String GetBasicInfo(long subProxy);
 
     private native String GetBalanceInfo(long subProxy);
 
-    private native long GetBalance(long subProxy);
+    private native long GetBalance(long subProxy, int balanceType);
 
     private native String CreateAddress(long subProxy);
 
     private native String GetAllAddress(long subProxy, int start, int count);
 
-    private native long GetBalanceWithAddress(long subProxy, String address);
+    private native long GetBalanceWithAddress(long subProxy, String address, int balanceType);
 
-    private native void AddCallback(long subProxy, SubWalletCallback subCallback);
+    private native void AddCallback(long subProxy, long subCallback);
 
-    private native void RemoveCallback(long subProxy);
+    private native void RemoveCallback(long subProxys, long subCallback);
 
-    private native String CreateTransaction(long subProxy, String fromAddress, String toAddress, long amount, String memo, String remark);
-
-    private native String CreateMultiSignTransaction(long subProxy, String fromAddress, String toAddress, long amount, String memo);
+    private native String CreateTransaction(long subProxy, String fromAddress, String toAddress, long amount, String memo, String remark, boolean useVotedUTXO);
 
     private native long CalculateTransactionFee(long subProxy, String rawTransaction, long feePerKb);
 
-    private native String UpdateTransactionFee(long subProxy, String rawTransaction, long fee);
+    private native String UpdateTransactionFee(long subProxy, String rawTransaction, long fee, String fromAddress);
 
     private native String SignTransaction(long subProxy, String rawTransaction, String payPassword);
 
@@ -131,7 +140,7 @@ public class SubWallet {
 
     private native String Sign(long subProxy, String message, String payPassword);
 
-    private native String CheckSign(long subProxy, String publicKey, String message, String signature);
+    private native boolean CheckSign(long subProxy, String publicKey, String message, String signature);
 
     private native String GetPublicKey(long jSubProxy);
 }

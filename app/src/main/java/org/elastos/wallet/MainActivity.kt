@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         // Used to load the 'wallet' library on application startup.
         init {
-            System.loadLibrary("wallet")
+            System.loadLibrary("spvsdk_jni")
         }
     }
 }
