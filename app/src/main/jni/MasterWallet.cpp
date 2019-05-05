@@ -20,7 +20,7 @@ static jstring JNICALL GetId(JNIEnv *env, jobject clazz, jlong instance) {
         IMasterWallet *masterWallet = (IMasterWallet *) instance;
         std::string key = masterWallet->GetId();
         id = env->NewStringUTF(key.c_str());
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         ThrowWalletException(env, e.what());
     }
 
@@ -36,7 +36,7 @@ static jstring JNICALL GetBasicInfo(JNIEnv *env, jobject clazz, jlong instance) 
     try {
         nlohmann::json basicInfo = masterWallet->GetBasicInfo();
         info = env->NewStringUTF(basicInfo.dump().c_str());
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         ThrowWalletException(env, e.what());
     }
 
@@ -78,7 +78,7 @@ static jobjectArray JNICALL GetAllSubWallets(JNIEnv *env, jobject clazz, jlong i
         }
 
         return subWalletArray;
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         ThrowWalletException(env, e.what());
         return NULL;
     }
@@ -99,7 +99,7 @@ static jlong JNICALL CreateSubWallet(JNIEnv *env, jobject clazz, jlong instance,
 
     try {
         subWallet = masterWallet->CreateSubWallet(chainID, jFeePerKb);
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         exception = true;
         msgException = e.what();
     }
@@ -121,7 +121,7 @@ static void JNICALL DestroyWallet(JNIEnv *env, jobject clazz, jlong jMasterInsta
         IMasterWallet *masterWallet = (IMasterWallet *) jMasterInstance;
         ISubWallet *subWallet = (ISubWallet *) jSubWalletInstance;
         masterWallet->DestroyWallet(subWallet);
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         ThrowWalletException(env, e.what());
     }
 }
@@ -135,7 +135,7 @@ static jstring JNICALL GetPublicKey(JNIEnv *env, jobject clazz, jlong instance) 
         IMasterWallet *masterWallet = (IMasterWallet *) instance;
         std::string k = masterWallet->GetPublicKey();
         key = env->NewStringUTF(k.c_str());
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         ThrowWalletException(env, e.what());
     }
 
@@ -158,7 +158,7 @@ static jstring JNICALL Sign(JNIEnv *env, jobject clazz, jlong instance, jstring 
     try {
         std::string r = masterWallet->Sign(message, payPassword);
         result = env->NewStringUTF(r.c_str());
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         exception = true;
         msgException = e.what();
     }
@@ -190,7 +190,7 @@ static jboolean JNICALL CheckSign(JNIEnv *env, jobject clazz, jlong instance,
 
     try {
         result = masterWallet->CheckSign(address, message, signature);
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         exception = true;
         msgException = e.what();
     }
@@ -220,7 +220,7 @@ IsAddressValid(JNIEnv *env, jobject clazz, jlong instance, jstring jaddress) {
 
     try {
         valid = masterWallet->IsAddressValid(address);
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         exception = true;
         msgException = e.what();
     }
@@ -242,7 +242,7 @@ static jobjectArray JNICALL GetSupportedChains(JNIEnv *env, jobject clazz, jlong
 
     try {
         chains = masterWallet->GetSupportedChains();
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         ThrowWalletException(env, e.what());
         return NULL;
     }
@@ -271,7 +271,7 @@ ChangePassword(JNIEnv *env, jobject clazz, jlong instance, jstring joldPassword,
 
     try {
         masterWallet->ChangePassword(oldPassword, newPassword);
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         exception = true;
         msgException = e.what();
     }

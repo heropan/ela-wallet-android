@@ -5,8 +5,12 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import org.elastos.wallet.core.MasterWallet
+import org.elastos.wallet.core.SubWalletCallback
 import org.elastos.wallet.core.MasterWalletManager
+import org.elastos.wallet.core.SubWallet
 import org.elastos.wallet.utils.Utils
+import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +32,14 @@ class MainActivity : AppCompatActivity() {
 
         val mnemonic = masterWalletManager.GenerateMnemonic(language)
         tv_mnemonic.text = mnemonic
+
+        val masterWallets = masterWalletManager.GetAllMasterWallets();
+        if (masterWallets.size == 0) {
+            var masterWallet = masterWalletManager.CreateMasterWallet("WalletID", mnemonic, "", "payPassword", false);
+            var subWallet = masterWallet.CreateSubWallet("ELA", 10000);
+            subWallet.AddCallback(SubWalletCallback("WalletID", "ELA"));
+            subWallet.GetBalance(SubWallet.BalanceType.Total);
+        }
     }
 
     private fun getLanguage(): String {

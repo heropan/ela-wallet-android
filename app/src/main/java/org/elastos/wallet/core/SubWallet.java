@@ -11,6 +11,12 @@ public class SubWallet {
     private SubWalletCallback mCallback = null;
     private String TAG = "SubWallet";
 
+    public enum BalanceType {
+        Default,
+        Voted,
+        Total,
+    }
+
     public String GetChainID() throws WalletException {
         return GetChainID(mInstance);
     }
@@ -23,8 +29,8 @@ public class SubWallet {
         return GetBalanceInfo(mInstance);
     }
 
-    public long GetBalance(int balanceType) throws WalletException {
-        return GetBalance(mInstance, balanceType);
+    public long GetBalance(BalanceType type) throws WalletException {
+        return GetBalance(mInstance, type.ordinal());
     }
 
     public String CreateAddress() throws WalletException {
@@ -35,8 +41,8 @@ public class SubWallet {
         return GetAllAddress(mInstance, start, count);
     }
 
-    public long GetBalanceWithAddress(String address, int balanceType) throws WalletException {
-        return GetBalanceWithAddress(mInstance, address, balanceType);
+    public long GetBalanceWithAddress(String address, BalanceType type) throws WalletException {
+        return GetBalanceWithAddress(mInstance, address, type.ordinal());
     }
 
     public void AddCallback(SubWalletCallback subCallback) throws WalletException {

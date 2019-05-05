@@ -7,7 +7,6 @@
 namespace Elastos {
     namespace ElaWallet {
 
-
         SubWalletCallback::SubWalletCallback(
                 /* [in] */ JNIEnv *env,
                 /* [in] */ jobject jobj) {

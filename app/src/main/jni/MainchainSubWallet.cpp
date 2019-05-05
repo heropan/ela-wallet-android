@@ -35,7 +35,7 @@ static jstring JNICALL CreateDepositTransaction(JNIEnv *env, jobject clazz, jlon
                                                                  sideChainAddress, memo, remark,
                                                                  useVotedUTXO);
         tx = env->NewStringUTF(txJson.dump().c_str());
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         exception = true;
         msgException = e.what();
     }
@@ -334,7 +334,7 @@ static jstring JNICALL CreateVoteProducerTransaction(JNIEnv *env, jobject clazz,
                                                                               publicKeys), memo,
                                                                       remark, useVotedUTXO);
         tx = env->NewStringUTF(txJson.dump().c_str());
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         exception = true;
         msgException = e.what();
     }

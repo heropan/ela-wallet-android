@@ -34,7 +34,7 @@ static jstring JNICALL CreateIdTransaction(JNIEnv *env, jobject clazz, jlong ins
                                                             nlohmann::json::parse(programJson),
                                                             memo, remark);
         tx = env->NewStringUTF(txJson.dump().c_str());
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         exception = true;
         msgException = e.what();
     }

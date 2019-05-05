@@ -33,7 +33,7 @@ CreateWithdrawTransaction(JNIEnv *env, jobject clazz, jlong jSideSubWalletProxy,
                                                                   mainChainAddress, memo, remark);
 
         tx = env->NewStringUTF(txJson.dump().c_str());
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         exception = true;
         msgException = e.what();
     }
@@ -62,7 +62,7 @@ static jstring JNICALL GetGenesisAddress(JNIEnv *env, jobject clazz, jlong jSide
     try {
         std::string address = wallet->GetGenesisAddress();
         addr = env->NewStringUTF(address.c_str());
-    } catch (std::exception &e) {
+    } catch (const std::exception &e) {
         exception = true;
         msgException = e.what();
     }
