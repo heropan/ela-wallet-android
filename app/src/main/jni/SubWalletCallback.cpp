@@ -7,29 +7,30 @@
 namespace Elastos {
     namespace ElaWallet {
 
-        SubWalletCallback::SubWalletCallback(
-                /* [in] */ JNIEnv *env,
-                /* [in] */ jobject jobj) {
-            mObj = env->NewGlobalRef(jobj);
-            env->GetJavaVM(&mVM);
+        SubWalletCallback::SubWalletCallback(JNIEnv *env, jobject jobj) {
+            _obj = env->NewGlobalRef(jobj);
+            env->GetJavaVM(&_jvm);
+
         }
 
         SubWalletCallback::~SubWalletCallback() {
-            if (mObj) {
-                GetEnv()->DeleteGlobalRef(mObj);
+            if (_jvm)
+                _jvm->DetachCurrentThread();
+            if (_obj) {
+                GetEnv()->DeleteGlobalRef(_obj);
             }
         }
 
         JNIEnv *SubWalletCallback::GetEnv() {
             JNIEnv *env;
-            assert(mVM != NULL);
-            mVM->AttachCurrentThread(&env, NULL);
+            assert(_jvm != NULL);
+            _jvm->AttachCurrentThread(&env, NULL);
             return env;
         }
 
         void SubWalletCallback::Detach() {
-            assert(mVM != NULL);
-            mVM->DetachCurrentThread();
+            assert(_jvm != NULL);
+            _jvm->DetachCurrentThread();
         }
 
         void SubWalletCallback::OnTransactionStatusChanged(const std::string &txid,
@@ -38,26 +39,26 @@ namespace Elastos {
                                                            uint32_t confirms) {
             JNIEnv *env = GetEnv();
 
-            jclass clazz = env->GetObjectClass(mObj);
+            jclass clazz = env->GetObjectClass(_obj);
             jmethodID methodId = env->GetMethodID(clazz, "OnTransactionStatusChanged",
                                                   "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V");
             jstring jtxid = env->NewStringUTF(txid.c_str());
             jstring jstatus = env->NewStringUTF(status.c_str());
             jstring jdesc = env->NewStringUTF(desc.dump().c_str());
 
-            env->CallVoidMethod(mObj, methodId, jtxid, jstatus, jdesc, confirms);
+            env->CallVoidMethod(_obj, methodId, jtxid, jstatus, jdesc, confirms);
 
-            Detach();
+//            Detach();
         }
 
         void SubWalletCallback::OnBlockSyncStarted() {
             JNIEnv *env = GetEnv();
 
-            jclass clazz = env->GetObjectClass(mObj);
+            jclass clazz = env->GetObjectClass(_obj);
             jmethodID methodId = env->GetMethodID(clazz, "OnBlockSyncStarted", "()V");
-            env->CallVoidMethod(mObj, methodId);
+            env->CallVoidMethod(_obj, methodId);
 
-            Detach();
+//            Detach();
         }
 
         void SubWalletCallback::OnBlockSyncProgress(uint32_t currentBlockHeight,
@@ -65,21 +66,21 @@ namespace Elastos {
                                                     time_t lastBlockTime) {
             JNIEnv *env = GetEnv();
 
-            jclass clazz = env->GetObjectClass(mObj);
-            jmethodID methodId = env->GetMethodID(clazz, "OnBlockHeightIncreased", "(IIJ)V");
-            env->CallVoidMethod(mObj, methodId, currentBlockHeight, estimatedHeight, lastBlockTime);
+            jclass clazz = env->GetObjectClass(_obj);
+            jmethodID methodId = env->GetMethodID(clazz, "OnBlockSyncProgress", "(IIJ)V");
+            env->CallVoidMethod(_obj, methodId, currentBlockHeight, estimatedHeight, lastBlockTime);
 
-            Detach();
+//            Detach();
         }
 
         void SubWalletCallback::OnBlockSyncStopped() {
             JNIEnv *env = GetEnv();
 
-            jclass clazz = env->GetObjectClass(mObj);
+            jclass clazz = env->GetObjectClass(_obj);
             jmethodID methodId = env->GetMethodID(clazz, "OnBlockSyncStopped", "()V");
-            env->CallVoidMethod(mObj, methodId);
+            env->CallVoidMethod(_obj, methodId);
 
-            Detach();
+//            Detach();
         }
 
         void SubWalletCallback::OnBalanceChanged(const std::string &asset, uint64_t balance) {
@@ -87,12 +88,12 @@ namespace Elastos {
 
             jstring assetID = env->NewStringUTF(asset.c_str());
 
-            jclass clazz = env->GetObjectClass(mObj);
+            jclass clazz = env->GetObjectClass(_obj);
             jmethodID methodId = env->GetMethodID(clazz, "OnBalanceChanged",
                                                   "(Ljava/lang/String;J)V");
-            env->CallVoidMethod(mObj, methodId, assetID, balance);
+            env->CallVoidMethod(_obj, methodId, assetID, balance);
 
-            Detach();
+//            Detach();
         }
 
         void
@@ -102,12 +103,12 @@ namespace Elastos {
             jstring jResult = env->NewStringUTF(result.dump().c_str());
             jstring jHash = env->NewStringUTF(hash.c_str());
 
-            jclass clazz = env->GetObjectClass(mObj);
+            jclass clazz = env->GetObjectClass(_obj);
             jmethodID methodId = env->GetMethodID(clazz, "OnTxPublished",
                                                   "(Ljava/lang/String;Ljava/lang/String;)V");
-            env->CallVoidMethod(mObj, methodId, jHash, jResult);
+            env->CallVoidMethod(_obj, methodId, jHash, jResult);
 
-            Detach();
+//            Detach();
         }
 
         void SubWalletCallback::OnTxDeleted(const std::string &hash, bool notifyUser,
@@ -116,11 +117,11 @@ namespace Elastos {
 
             jstring jHash = env->NewStringUTF(hash.c_str());
 
-            jclass clazz = env->GetObjectClass(mObj);
+            jclass clazz = env->GetObjectClass(_obj);
             jmethodID methodId = env->GetMethodID(clazz, "OnTxDeleted", "(Ljava/lang/String;ZZ)V");
-            env->CallVoidMethod(mObj, methodId, jHash, notifyUser, recommendRescan);
+            env->CallVoidMethod(_obj, methodId, jHash, notifyUser, recommendRescan);
 
-            Detach();
+//            Detach();
         }
 
     }

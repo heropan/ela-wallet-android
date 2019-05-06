@@ -7,14 +7,14 @@
 #include "nlohmann/json.hpp"
 
 using namespace Elastos::ElaWallet;
-const static std::string CLASS_MCSUBWALLET = classesPackagePath + "MainchainSubWallet";
-const static std::string CLASS_IDSUBWALLET = classesPackagePath + "IDChainSubWallet";
-const static std::string CHAINID_MAINCHAIN = "ELA";
-const static std::string CHAINID_IDCHAIN = "IdChain";
+const std::string CLASS_MCSUBWALLET = CLASS_PACKAGE_PATH + "MainchainSubWallet";
+const std::string CLASS_IDSUBWALLET = CLASS_PACKAGE_PATH + "IDChainSubWallet";
+const std::string CHAINID_MAINCHAIN = "ELA";
+const std::string CHAINID_IDCHAIN = "IdChain";
 
-#define JNI_GetId "(J)Ljava/lang/String;"
+#define JNI_GetID "(J)Ljava/lang/String;"
 
-static jstring JNICALL GetId(JNIEnv *env, jobject clazz, jlong instance) {
+static jstring JNICALL GetID(JNIEnv *env, jobject clazz, jlong instance) {
     jstring id = NULL;
     try {
         IMasterWallet *masterWallet = (IMasterWallet *) instance;
@@ -285,7 +285,7 @@ ChangePassword(JNIEnv *env, jobject clazz, jlong instance, jstring joldPassword,
 }
 
 static const JNINativeMethod methods[] = {
-        REGISTER_METHOD(GetId),
+        REGISTER_METHOD(GetID),
         REGISTER_METHOD(GetBasicInfo),
         REGISTER_METHOD(GetAllSubWallets),
         REGISTER_METHOD(CreateSubWallet),

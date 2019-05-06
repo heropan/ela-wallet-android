@@ -15,7 +15,7 @@ namespace Elastos {
 
         class SubWalletCallback : public ISubWalletCallback {
         public:
-            SubWalletCallback(/* [in] */ JNIEnv *env, /* [in] */ jobject jobj);
+            SubWalletCallback(JNIEnv *env, jobject jobj);
 
         public:
             virtual void OnTransactionStatusChanged(
@@ -55,8 +55,8 @@ namespace Elastos {
             void Detach();
 
         private:
-            JavaVM *mVM;
-            jobject mObj;
+            JavaVM *_jvm;
+            jobject _obj;
         };
 
     }

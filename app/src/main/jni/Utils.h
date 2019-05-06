@@ -21,7 +21,7 @@
 
 #define REGISTER_METHOD(name) { #name, JNI_##name, (void *)name }
 
-extern const std::string classesPackagePath;
+#define CLASS_PACKAGE_PATH std::string("org/elastos/wallet/core/")
 
 int RegisterNativeMethods(JNIEnv *env, const std::string &className, const JNINativeMethod *methods,
                           int numMethods);

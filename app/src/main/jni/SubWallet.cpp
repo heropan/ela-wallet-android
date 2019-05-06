@@ -147,6 +147,7 @@ static void JNICALL AddCallback(JNIEnv *env, jobject clazz, jlong jSubProxy,
         SubWalletCallback *subWalletCallback = (SubWalletCallback *) jSubWalletCallbackInstance;
 
         subWallet->AddCallback(subWalletCallback);
+        subWalletCallback->OnBlockSyncStarted();
     } catch (const std::exception &e) {
         ThrowWalletException(env, e.what());
     }

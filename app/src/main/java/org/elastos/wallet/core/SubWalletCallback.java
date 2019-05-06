@@ -40,14 +40,14 @@ public class SubWalletCallback {
      * @param confirms is confirm count util this callback fired.
      */
     public void OnTransactionStatusChanged(String txID, String status, String desc, int confirms) {
-        Log.i(TAG, GetWalletID() + "tx status changed: " + txID + "," + status + "," + confirms);
+        Log.i(TAG, GetWalletID() + "[OnTransactionStatusChanged] " + txID + "," + status + "," + confirms);
     }
 
     /**
      * Callback method fired when block begin synchronizing with a peer. This callback could be used to show progress.
      */
     public void OnBlockSyncStarted() {
-        Log.i(TAG, GetWalletID() + "block sync started");
+        Log.i(TAG, GetWalletID() + "[OnBlockSyncStarted]");
     }
 
     /**
@@ -58,26 +58,26 @@ public class SubWalletCallback {
      * @param lastBlockTime      timestamp of the last block.
      */
     public void OnBlockSyncProgress(int currentBlockHeight, int estimatedHeight, long lastBlockTime) {
-        Log.i(TAG, GetWalletID() + "[" + currentBlockHeight + "/" + estimatedHeight + "] timestamp = " + lastBlockTime);
+        Log.i(TAG, GetWalletID() + "[OnBlockSyncProgress] (" + currentBlockHeight + "/" + estimatedHeight + ") t = " + lastBlockTime);
     }
 
     /**
      * Callback method fired when block end synchronizing with a peer. This callback could be used to show progress.
      */
     public void OnBlockSyncStopped() {
-        Log.i(TAG, GetWalletID() + "block sync stopped");
+        Log.i(TAG, GetWalletID() + "[OnBlockSyncStopped]");
     }
 
     public void OnBalanceChanged(String assetID, long balance) {
-        Log.i(TAG, GetWalletID() + "balance changed: [" + assetID + "] = " + balance);
+        Log.i(TAG, GetWalletID() + "[OnBalanceChanged] " + assetID + " = " + balance);
     }
 
     public void OnTxPublished(String hash, String result) {
-        Log.i(TAG, GetWalletID() + "tx published: " + hash + ", result: " + result);
+        Log.i(TAG, GetWalletID() + "[OnTxPublished] " + hash + ", result: " + result);
     }
 
     public void OnTxDeleted(String hash, boolean notifyUser, boolean recommendRescan) {
-        Log.i(TAG, GetWalletID() + "tx deleted: " + hash + ", notifyUser: " + notifyUser + ", recommendRescan: " + recommendRescan);
+        Log.i(TAG, GetWalletID() + "[OnTxDeleted] " + hash + ", notifyUser: " + notifyUser + ", recommendRescan: " + recommendRescan);
     }
 
     private native long InitSubWalletCallback();

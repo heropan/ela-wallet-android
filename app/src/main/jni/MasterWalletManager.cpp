@@ -373,7 +373,7 @@ static jstring JNICALL ExportWalletWithKeystore(JNIEnv *env, jobject clazz, jlon
     const char *backupPassword = env->GetStringUTFChars(jbackupPassword, NULL);
     const char *payPassword = env->GetStringUTFChars(jpayPassword, NULL);
 
-    jclass cls = env->FindClass((classesPackagePath + "MasterWallet").c_str());
+    jclass cls = env->FindClass((CLASS_PACKAGE_PATH + "MasterWallet").c_str());
     jlong field = GetJavaLongField(env, cls, jmasterWallet, "mInstance");
     CheckErrorAndLog(env, "ExportWalletWithKeystore", __LINE__);
     IMasterWallet *masterWallet = (IMasterWallet *) field;
@@ -408,7 +408,7 @@ static jstring JNICALL ExportWalletWithMnemonic(JNIEnv *env, jobject clazz, jlon
     bool exception = false;
     std::string msgException;
 
-    jclass cls = env->FindClass((classesPackagePath + "MasterWallet").c_str());
+    jclass cls = env->FindClass((CLASS_PACKAGE_PATH + "MasterWallet").c_str());
     jlong field = GetJavaLongField(env, cls, jmasterWallet, "mInstance");
     CheckErrorAndLog(env, "ExportWalletWithMnemonic", __LINE__);
     IMasterWallet *masterWallet = (IMasterWallet *) field;

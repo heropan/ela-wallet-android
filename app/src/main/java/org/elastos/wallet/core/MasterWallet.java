@@ -17,8 +17,8 @@ public class MasterWallet {
 
     private long mInstance;
 
-    public String GetId() {
-        return GetId(mInstance);
+    public String GetID() {
+        return GetID(mInstance);
     }
 
     public String GetBasicInfo() {
@@ -94,7 +94,7 @@ public class MasterWallet {
         ChangePassword(mInstance, oldPassword, newPassword);
     }
 
-    private native String GetId(long instance);
+    private native String GetID(long instance);
 
     private native String GetBasicInfo(long instance);
 

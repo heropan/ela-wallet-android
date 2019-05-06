@@ -7,8 +7,7 @@
 
 #define TAG "Utils"
 
-const std::string classesPackagePath = "org/elastos/wallet/core/";
-const std::string exceptionClassPath = classesPackagePath + "WalletException";
+const std::string exceptionClassPath = CLASS_PACKAGE_PATH + "WalletException";
 
 extern jint RegisterMasterWalletManager(JNIEnv *env, const std::string &path);
 
@@ -30,13 +29,13 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
         return JNI_ERR;
     }
 
-    RegisterMasterWalletManager(env, classesPackagePath);
-    RegisterMasterWallet(env, classesPackagePath);
-    RegisterSubWallet(env, classesPackagePath);
-    RegisterMainchainSubWallet(env, classesPackagePath);
-    RegisterSidechainSubWallet(env, classesPackagePath);
-    RegisterIDChainSubWallet(env, classesPackagePath);
-    RegisterSubWalletCallback(env, classesPackagePath);
+    RegisterMasterWalletManager(env, CLASS_PACKAGE_PATH);
+    RegisterMasterWallet(env, CLASS_PACKAGE_PATH);
+    RegisterSubWallet(env, CLASS_PACKAGE_PATH);
+    RegisterMainchainSubWallet(env, CLASS_PACKAGE_PATH);
+    RegisterSidechainSubWallet(env, CLASS_PACKAGE_PATH);
+    RegisterIDChainSubWallet(env, CLASS_PACKAGE_PATH);
+    RegisterSubWalletCallback(env, CLASS_PACKAGE_PATH);
 
     return JNI_VERSION_1_6;
 }
