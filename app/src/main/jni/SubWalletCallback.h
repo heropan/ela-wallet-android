@@ -52,8 +52,6 @@ namespace Elastos {
         private:
             JNIEnv *GetEnv();
 
-            void Detach();
-
         private:
             JavaVM *_jvm;
             jobject _obj;

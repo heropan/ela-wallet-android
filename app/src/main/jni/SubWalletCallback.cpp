@@ -14,23 +14,16 @@ namespace Elastos {
         }
 
         SubWalletCallback::~SubWalletCallback() {
-            if (_jvm)
-                _jvm->DetachCurrentThread();
-            if (_obj) {
-                GetEnv()->DeleteGlobalRef(_obj);
-            }
+            JNIEnv *env = GetEnv();
+
+            _jvm->DetachCurrentThread();
+            env->DeleteGlobalRef(_obj);
         }
 
         JNIEnv *SubWalletCallback::GetEnv() {
             JNIEnv *env;
-            assert(_jvm != NULL);
             _jvm->AttachCurrentThread(&env, NULL);
             return env;
-        }
-
-        void SubWalletCallback::Detach() {
-            assert(_jvm != NULL);
-            _jvm->DetachCurrentThread();
         }
 
         void SubWalletCallback::OnTransactionStatusChanged(const std::string &txid,
